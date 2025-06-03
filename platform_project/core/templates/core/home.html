@@ -1,15 +1,47 @@
 {% extends "base_generic.html" %}
 
-{% block title %}Homepage - My Platform{% endblock %}
+{% block title %}Welcome - Supply & Demand Platform{% endblock %}
 
 {% block content %}
-  <h1>Welcome to My Platform!</h1>
-  <p>This is the homepage.</p>
+  <div class="homepage-hero">
+    <h2>Welcome to Our Supply & Demand Platform!</h2>
+    <p class="lead">Connect with others to find or offer goods and services. Post your needs or your haves and let the community help.</p>
 
-  {% if user.is_authenticated %}
-    <p>Hello, {{ user.username }}!</p>
-    <p><a href="{% url 'logout' %}">Logout</a></p>
-  {% else %}
-    <p><a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a></p>
-  {% endif %}
+    <div class="cta-buttons">
+      {% if user.is_authenticated %}
+        <a href="{% url 'post_create' %}" class="btn btn-primary">Create a New Post</a>
+        <a href="{% url 'post_list' %}" class="btn btn-secondary">Browse All Posts</a>
+      {% else %}
+        <a href="{% url 'register' %}" class="btn btn-primary">Register Now</a>
+        <a href="{% url 'post_list' %}" class="btn btn-secondary">Browse Posts</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <hr class="my-4">
+
+  <div class="recent-posts">
+    <h3>Recent Activity</h3>
+    {% if recent_posts %}
+      <div class="post-list-condensed">
+        {% for post in recent_posts %}
+          <div class="post-item-condensed">
+            <h4><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h4>
+            <p class="post-meta">Type: {{ post.get_post_type_display }} | By: {{ post.created_by.username }} | On: {{ post.created_at|date:"M d, Y" }}</p>
+            <p class="post-categories">
+              Categories:
+              {% for category in post.categories.all %}
+                <span class="badge">{{ category.name }}</span>{% if not forloop.last %} {% endif %}
+              {% empty %}
+                <span class="badge-empty">None</span>
+              {% endfor %}
+            </p>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No recent posts to display. Be the first to <a href="{% url 'post_create' %}">create one</a>!</p>
+    {% endif %}
+  </div>
+
 {% endblock %}

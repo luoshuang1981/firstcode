@@ -3,32 +3,45 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages # Add this import
 from .models import Post
 from .forms import PostForm
 
 class RegisterView(generic.CreateView):
     form_class = UserCreationForm
-    success_url = reverse_lazy('login') # Redirect to login page after successful registration
+    success_url = reverse_lazy('login')
     template_name = 'registration/register.html'
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f'Account created for {form.cleaned_data.get("username")}! You can now log in.')
+        return response
+
 def home(request):
-    return render(request, 'core/home.html')
+    recent_posts = Post.objects.order_by('-created_at')[:3] # Get latest 3 posts
+    context = {
+        'recent_posts': recent_posts
+    }
+    return render(request, 'core/home.html', context)
 
 class PostCreateView(LoginRequiredMixin, generic.CreateView):
     model = Post
     form_class = PostForm
     template_name = 'core/post_form.html'
-    success_url = reverse_lazy('post_list') # Redirect to post list after successful post creation
+    success_url = reverse_lazy('post_list')
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        messages.success(self.request, "Post created successfully!")
+        return response
 
 class PostListView(generic.ListView):
     model = Post
     template_name = 'core/post_list.html'
     context_object_name = 'posts'
     ordering = ['-created_at']
+    paginate_by = 10 # Add pagination
 
 class PostDetailView(generic.DetailView):
     model = Post
@@ -49,8 +62,9 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
 
     def form_valid(self, form):
         # created_by should not change on update, test_func handles authorization
-        # form.instance.created_by = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        messages.success(self.request, "Post updated successfully!")
+        return response
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Post
@@ -60,3 +74,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView
     def test_func(self):
         post = self.get_object()
         return post.created_by == self.request.user
+
+    def form_valid(self, form):
+        messages.success(self.request, f"Post '{self.object.title}' deleted successfully!")
+        return super().form_valid(form)

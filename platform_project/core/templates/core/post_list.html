@@ -4,27 +4,58 @@
 
 {% block content %}
   <h2>All Posts</h2>
-  {% if posts %}
-    <ul>
-      {% for post in posts %}
-        <li>
-          <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
-          <p>Type: {{ post.get_post_type_display }}</p>
-          <p>By: {{ post.created_by.username }} on {{ post.created_at|date:"F d, Y" }}</p>
-          <p>Categories:
-            {% for category in post.categories.all %}
-              {{ category.name }}{% if not forloop.last %}, {% endif %}
-            {% empty %}
-              No categories.
-            {% endfor %}
-          </p>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No posts have been created yet.</p>
-  {% endif %}
+
   {% if user.is_authenticated %}
-    <p><a href="{% url 'post_create' %}">Create a New Post</a></p>
+    <p><a href="{% url 'post_create' %}" class="btn btn-primary mb-3">Create a New Post</a></p>
+  {% endif %}
+
+  {% if posts %}
+    <div class="post-list">
+      {% for post in posts %}
+        <div class="post-card">
+          <h3 class="post-card-title"><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
+          <p class="post-card-meta">
+            By: {{ post.created_by.username }} | On: {{ post.created_at|date:"F d, Y" }}
+          </p>
+          <p class="post-card-type post-type-{{ post.post_type|lower }}">
+            Type: <strong>{{ post.get_post_type_display }}</strong>
+          </p>
+          <div class="post-card-categories">
+            Categories:
+            {% for category in post.categories.all %}
+              <span class="badge">{{ category.name }}</span>{% if not forloop.last %} {% endif %}
+            {% empty %}
+              <span class="badge-empty">None</span>
+            {% endfor %}
+          </div>
+          <div class="post-card-description">
+            <p>{{ post.description|truncatewords:30 }} <a href="{% url 'post_detail' post.pk %}">Read more...</a></p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+      <div class="pagination">
+        <span class="step-links">
+          {% if page_obj.has_previous %}
+            <a href="?page=1" class="btn btn-sm btn-outline-secondary">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-sm btn-outline-secondary">previous</a>
+          {% endif %}
+
+          <span class="current-page">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+          </span>
+
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-sm btn-outline-secondary">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-sm btn-outline-secondary">last &raquo;</a>
+          {% endif %}
+        </span>
+      </div>
+    {% endif %}
+
+  {% else %}
+    <p>No posts have been created yet. {% if user.is_authenticated %}<a href="{% url 'post_create' %}">Be the first to create one!</a>{% endif %}</p>
   {% endif %}
 {% endblock %}

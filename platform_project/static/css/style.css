@@ -1,1 +1,553 @@
-body { font-family: sans-serif; margin: 20px; background-color: #f0f0f0; }
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 0.75em;
+  color: #222;
+}
+
+h1 { font-size: 2.2em; }
+h2 { font-size: 1.8em; }
+h3 { font-size: 1.5em; }
+p { margin-bottom: 1em; }
+a { color: #007bff; text-decoration: none; }
+a:hover { text-decoration: underline; color: #0056b3;}
+
+/* Layout */
+.container {
+  width: 80%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  flex-grow: 1; /* Allows container to grow and push footer down */
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+    flex-grow: 1;
+}
+
+/* Header */
+.site-header {
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.site-header .site-title {
+  font-size: 2.5rem;
+  color: #333;
+  text-decoration: none;
+}
+.site-header .site-title:hover {
+  color: #007bff;
+}
+
+
+/* Navigation Bar */
+.navbar {
+  background-color: #333;
+  padding: 0.5rem 0;
+  margin-bottom: 1.5rem;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  justify-content: center; /* Center items for now, can be flex-start or space-between */
+  padding: 0;
+}
+
+.nav-item {
+  margin: 0 10px;
+}
+
+.nav-item-right {
+    margin-left: auto; /* Pushes login/logout to the right */
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  display: block;
+  border-radius: 4px;
+}
+
+.nav-link:hover {
+  background-color: #555;
+  text-decoration: none;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 10px 15px;
+  font-size: 1em;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  margin-right: 5px; /* Spacing between buttons */
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #007bff;
+}
+.btn-primary:hover { background-color: #0056b3; text-decoration: none; color: #fff;}
+
+.btn-secondary {
+  color: #fff;
+  background-color: #6c757d;
+}
+.btn-secondary:hover { background-color: #545b62; text-decoration: none; color: #fff;}
+
+.btn-danger {
+  color: #fff;
+  background-color: #dc3545;
+}
+.btn-danger:hover { background-color: #b02a37; text-decoration: none; color: #fff;}
+
+/* Messages */
+.messages {
+  list-style: none;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+.messages li {
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 3px;
+}
+.messages .success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+.messages .error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+.messages .warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+.messages .info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+
+/* Forms */
+form {
+    margin-bottom: 1.5rem; /* Add some space below forms */
+}
+
+/* Styling for fields rendered by {{ form.as_p }} */
+form p {
+    margin-bottom: 1rem; /* Space between each form field paragraph */
+}
+form p label {
+    display: block;
+    margin-bottom: 0.3rem; /* Space between label and input */
+    font-weight: bold;
+    font-size: 0.95em;
+    color: #444;
+}
+form p input[type="text"],
+form p input[type="email"],
+form p input[type="password"],
+form p input[type="url"],
+form p input[type="number"],
+form p textarea,
+form p select {
+    width: 100%;
+    padding: 12px; /* Increased padding for better touch targets and appearance */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding doesn't expand width */
+    font-size: 1em;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+form p input:focus,
+form p textarea:focus,
+form p select:focus {
+    border-color: #007bff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Help text styling */
+form p .helptext {
+    display: block;
+    font-size: 0.85em;
+    color: #6c757d; /* Bootstrap's secondary text color */
+    margin-top: 0.25rem;
+}
+
+/* Form-level error messages (e.g., non_field_errors) */
+form .errorlist {
+    list-style: none;
+    padding: 10px;
+    margin-bottom: 1rem;
+    background-color: #f8d7da; /* Bootstrap's danger background */
+    color: #721c24; /* Bootstrap's danger text color */
+    border: 1px solid #f5c6cb; /* Bootstrap's danger border color */
+    border-radius: 4px;
+}
+form .errorlist li {
+    margin-bottom: 0.25rem;
+}
+
+/* Field-specific error messages (often rendered next to or below the field by widgets) */
+/* Assuming Django might wrap these in a div or span with a class like 'error' or 'field-error' */
+form p .errorlist { /* For errors related to a specific field when using as_p */
+    list-style: none;
+    padding: 0;
+    margin-top: 0.25rem;
+    font-size: 0.85em;
+    color: #dc3545; /* Bootstrap's danger color */
+}
+form p .errorlist li {
+    margin-bottom: 0;
+}
+
+
+/* Styling for CheckboxSelectMultiple (e.g., categories) */
+form p ul#id_categories { /* Assuming 'categories' is the field name */
+    list-style: none;
+    padding: 0;
+    margin-top: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+form p ul#id_categories li {
+    margin-bottom: 0.5rem;
+    display: block; /* Or 'flex' for alignment */
+    align-items: center;
+}
+form p ul#id_categories li label {
+    font-weight: normal;
+    margin-left: 0.3rem;
+    font-size: 0.9em;
+    color: #333;
+    display: inline; /* Keep label next to checkbox */
+}
+form p ul#id_categories li input[type="checkbox"] {
+    width: auto; /* Don't make checkboxes full-width */
+    margin-right: 0.5rem;
+    vertical-align: middle; /* Align checkbox with label text */
+}
+
+/* Form buttons */
+form button[type="submit"],
+form input[type="submit"] { /* Also target input type submit */
+    margin-top: 1rem; /* Space above the submit button */
+}
+/* Ensure .btn classes are applied in templates for form buttons */
+form .btn { /* General styling for any button in a form if not more specific */
+    margin-right: 10px; /* Consistent spacing for multiple buttons */
+}
+form .btn:last-child {
+    margin-right: 0;
+}
+
+
+/* Footer */
+.site-footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  margin-top: 2rem;
+  border-top: 1px solid #eee;
+  color: #777;
+  font-size: 0.9em;
+}
+
+/* Basic Responsiveness */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: center;
+  }
+  .nav-item {
+    margin: 5px 0;
+  }
+  .nav-item-right {
+    margin-left: 0;
+  }
+}
+
+/* Homepage Specific Styles */
+.homepage-hero {
+  text-align: center;
+  padding: 2rem 1rem;
+  background-color: #e9ecef; /* Light grey background for hero section */
+  border-radius: 5px;
+  margin-bottom: 2rem;
+}
+.homepage-hero h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.homepage-hero .lead {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+.cta-buttons .btn {
+  margin: 0 10px; /* Spacing for Call To Action buttons */
+  padding: 12px 20px;
+  font-size: 1.1em;
+}
+
+hr.my-4 { /* Utility class for a styled horizontal rule */
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.recent-posts h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.6em;
+}
+
+.post-list-condensed .post-item-condensed {
+  background-color: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #eee;
+}
+.post-list-condensed .post-item-condensed h4 {
+  margin-bottom: 0.25rem;
+}
+.post-list-condensed .post-item-condensed h4 a {
+  text-decoration: none;
+}
+.post-list-condensed .post-meta {
+  font-size: 0.85em;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+.post-list-condensed .post-categories .badge {
+  background-color: #007bff;
+  color: white;
+  padding: 0.25em 0.5em;
+  border-radius: 3px;
+  font-size: 0.75em;
+  margin-right: 5px;
+}
+.post-list-condensed .post-categories .badge-empty {
+  color: #777;
+  font-style: italic;
+  font-size: 0.75em;
+}
+
+/* General list styling for post lists is now .post-card based */
+.post-list {
+    /* This class is on the container div for post-cards */
+}
+
+.post-card {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.post-card-title {
+  font-size: 1.75em;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+.post-card-title a {
+  text-decoration: none;
+  color: #333;
+}
+.post-card-title a:hover {
+  color: #007bff;
+}
+.post-card-meta {
+  font-size: 0.9em;
+  color: #777;
+  margin-bottom: 0.75em;
+}
+.post-card-type {
+  margin-bottom: 0.75em;
+  font-weight: bold;
+}
+.post-type-supply strong {
+  color: #28a745; /* Green for supply */
+}
+.post-type-demand strong {
+  color: #dc3545; /* Red for demand */
+}
+.post-card-categories {
+  margin-bottom: 1em;
+  font-size: 0.9em;
+}
+.post-card-categories .badge {
+  background-color: #6c757d; /* Secondary color for category badges */
+  color: white;
+  padding: 0.3em 0.6em;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+.post-card-categories .badge-empty {
+  color: #888;
+  font-style: italic;
+}
+.post-card-description p {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 0; /* Remove default p margin if 'Read more' is on same line */
+}
+.post-card-description p a {
+  font-weight: bold;
+}
+
+/* Pagination Styling */
+.pagination {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+.pagination .step-links a,
+.pagination .current-page {
+  margin: 0 5px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+.pagination .step-links a {
+  border: 1px solid #ddd;
+  color: #007bff;
+}
+.pagination .step-links a:hover {
+  background-color: #f0f0f0;
+  text-decoration: none;
+}
+.pagination .current-page {
+  color: #333;
+  font-weight: bold;
+  border: 1px solid #007bff;
+  background-color: #007bff;
+  color: #fff;
+}
+.btn.btn-sm.btn-outline-secondary { /* For pagination buttons in template */
+    padding: 5px 10px;
+    font-size: 0.875em;
+    margin: 0 2px;
+}
+
+
+/* Post Detail Specifics */
+.post-detail-container {
+  padding: 15px;
+  background-color: #fff; /* Match container bg if not already */
+  border-radius: 5px; /* Optional: if container has rounded corners */
+}
+
+.post-detail-header h2 {
+  font-size: 2.2em; /* Larger for detail view title */
+  margin-bottom: 0.75em;
+  color: #333;
+}
+
+.post-metadata {
+  margin-bottom: 1.5rem;
+}
+.post-metadata dl {
+  display: grid;
+  grid-template-columns: max-content auto; /* Label and value columns */
+  gap: 8px 15px; /* Row and column gap */
+}
+.post-metadata dt {
+  font-weight: bold;
+  color: #555;
+}
+.post-metadata dd {
+  margin-left: 0; /* Reset default dd margin */
+  color: #333;
+}
+/* Consistent post-type styling with list view */
+.post-metadata .post-type-supply strong { color: #28a745; }
+.post-metadata .post-type-demand strong { color: #dc3545; }
+
+/* Consistent category badge styling */
+.post-categories-detail .badge {
+  background-color: #6c757d;
+  color: white;
+  padding: 0.3em 0.6em;
+  border-radius: 3px;
+  margin-right: 5px;
+  font-size: 0.9em;
+}
+.post-categories-detail .badge-empty {
+  color: #888;
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+hr.my-3 { /* Utility class for a styled horizontal rule - smaller margin */
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 0;
+  border-top: 1px solid #ddd;
+}
+
+.post-description h3 {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+  color: #444;
+}
+.post-description p {
+  line-height: 1.7;
+  color: #333;
+}
+
+.post-actions {
+  margin-top: 2rem;
+  text-align: left; /* Or center if preferred */
+}
+.post-actions .btn {
+  margin-right: 10px; /* Space between action buttons */
+}
+.post-actions .btn-secondary { /* Specific for "Back to all posts" if needed */
+    /* Add any specific overrides if .btn-secondary isn't enough */
+}

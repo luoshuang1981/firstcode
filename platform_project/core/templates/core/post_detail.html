@@ -3,31 +3,51 @@
 {% block title %}{{ post.title }} - My Platform{% endblock %}
 
 {% block content %}
-  <h2>{{ post.title }}</h2>
-  <p><strong>Type:</strong> {{ post.get_post_type_display }}</p>
-  <p><strong>Author:</strong> {{ post.created_by.username }}</p>
-  <p><strong>Created:</strong> {{ post.created_at|date:"F d, Y H:i" }}</p>
-  <p><strong>Last Updated:</strong> {{ post.updated_at|date:"F d, Y H:i" }}</p>
+<div class="post-detail-container">
+  <header class="post-detail-header">
+    <h2>{{ post.title }}</h2>
+  </header>
 
-  <p><strong>Categories:</strong>
-    {% for category in post.categories.all %}
-      {{ category.name }}{% if not forloop.last %}, {% endif %}
-    {% empty %}
-      No categories listed.
-    {% endfor %}
-  </p>
+  <section class="post-metadata">
+    <dl>
+      <dt>Type:</dt>
+      <dd class="post-type-{{ post.post_type|lower }}"><strong>{{ post.get_post_type_display }}</strong></dd>
 
-  <hr>
-  <h3>Description:</h3>
-  <p>{{ post.description|linebreaksbr }}</p>
+      <dt>Author:</dt>
+      <dd>{{ post.created_by.username }}</dd>
 
-  <hr>
-  <p><a href="{% url 'post_list' %}">Back to all posts</a></p>
+      <dt>Created:</dt>
+      <dd>{{ post.created_at|date:"F d, Y H:i" }}</dd>
 
-  {% if post.created_by == user %}
-    <p>
+      <dt>Last Updated:</dt>
+      <dd>{{ post.updated_at|date:"F d, Y H:i" }}</dd>
+
+      <dt>Categories:</dt>
+      <dd class="post-categories-detail">
+        {% for category in post.categories.all %}
+          <span class="badge">{{ category.name }}</span>{% if not forloop.last %} {% endif %}
+        {% empty %}
+          <span class="badge-empty">None</span>
+        {% endfor %}
+      </dd>
+    </dl>
+  </section>
+
+  <hr class="my-3">
+
+  <section class="post-description">
+    <h3>Description:</h3>
+    <p>{{ post.description|linebreaksbr }}</p>
+  </section>
+
+  <hr class="my-3">
+
+  <section class="post-actions">
+    {% if post.created_by == user %}
       <a href="{% url 'post_update' pk=post.pk %}" class="btn btn-primary">Edit Post</a>
       <a href="{% url 'post_delete' pk=post.pk %}" class="btn btn-danger">Delete Post</a>
-    </p>
-  {% endif %}
+    {% endif %}
+    <a href="{% url 'post_list' %}" class="btn btn-secondary">Back to all posts</a>
+  </section>
+</div>
 {% endblock %}
