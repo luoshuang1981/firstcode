@@ -1,0 +1,33 @@
+{% extends "base_generic.html" %}
+
+{% block title %}{{ post.title }} - My Platform{% endblock %}
+
+{% block content %}
+  <h2>{{ post.title }}</h2>
+  <p><strong>Type:</strong> {{ post.get_post_type_display }}</p>
+  <p><strong>Author:</strong> {{ post.created_by.username }}</p>
+  <p><strong>Created:</strong> {{ post.created_at|date:"F d, Y H:i" }}</p>
+  <p><strong>Last Updated:</strong> {{ post.updated_at|date:"F d, Y H:i" }}</p>
+
+  <p><strong>Categories:</strong>
+    {% for category in post.categories.all %}
+      {{ category.name }}{% if not forloop.last %}, {% endif %}
+    {% empty %}
+      No categories listed.
+    {% endfor %}
+  </p>
+
+  <hr>
+  <h3>Description:</h3>
+  <p>{{ post.description|linebreaksbr }}</p>
+
+  <hr>
+  <p><a href="{% url 'post_list' %}">Back to all posts</a></p>
+
+  {% if post.created_by == user %}
+    <p>
+      <a href="{% url 'post_update' pk=post.pk %}" class="btn btn-primary">Edit Post</a>
+      <a href="{% url 'post_delete' pk=post.pk %}" class="btn btn-danger">Delete Post</a>
+    </p>
+  {% endif %}
+{% endblock %}

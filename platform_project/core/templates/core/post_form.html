@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block title %}{% if object %}Edit Post{% else %}Create New Post{% endif %} - My Platform{% endblock %}
+
+{% block content %}
+  <h2>{% if object %}Edit Post: {{ object.title }}{% else %}Create New Post{% endif %}</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{% if object %}Save Changes{% else %}Create Post{% endif %}</button>
+    {% if object %}
+      <a href="{% url 'post_detail' pk=object.pk %}">Cancel</a>
+    {% endif %}
+  </form>
+{% endblock %}
