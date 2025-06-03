@@ -1,6 +1,7 @@
 {% extends "base_generic.html" %}
+{% load i18n %}
 
-{% block title %}{{ post.title }} - My Platform{% endblock %}
+{% block title %}{{ post.title }} - {% translate "My Platform" %}{% endblock %}
 
 {% block content %}
 <div class="post-detail-container">
@@ -10,24 +11,24 @@
 
   <section class="post-metadata">
     <dl>
-      <dt>Type:</dt>
+      <dt>{% translate "Type" %}:</dt>
       <dd class="post-type-{{ post.post_type|lower }}"><strong>{{ post.get_post_type_display }}</strong></dd>
 
-      <dt>Author:</dt>
+      <dt>{% translate "Author" %}:</dt>
       <dd>{{ post.created_by.username }}</dd>
 
-      <dt>Created:</dt>
+      <dt>{% translate "Created" %}:</dt>
       <dd>{{ post.created_at|date:"F d, Y H:i" }}</dd>
 
-      <dt>Last Updated:</dt>
+      <dt>{% translate "Last Updated" %}:</dt>
       <dd>{{ post.updated_at|date:"F d, Y H:i" }}</dd>
 
-      <dt>Categories:</dt>
+      <dt>{% translate "Categories" %}:</dt>
       <dd class="post-categories-detail">
         {% for category in post.categories.all %}
           <span class="badge">{{ category.name }}</span>{% if not forloop.last %} {% endif %}
         {% empty %}
-          <span class="badge-empty">None</span>
+          <span class="badge-empty">{% translate "None" %}</span>
         {% endfor %}
       </dd>
     </dl>
@@ -36,7 +37,7 @@
   <hr class="my-3">
 
   <section class="post-description">
-    <h3>Description:</h3>
+    <h3>{% translate "Description" %}:</h3>
     <p>{{ post.description|linebreaksbr }}</p>
   </section>
 
@@ -44,10 +45,10 @@
 
   <section class="post-actions">
     {% if post.created_by == user %}
-      <a href="{% url 'post_update' pk=post.pk %}" class="btn btn-primary">Edit Post</a>
-      <a href="{% url 'post_delete' pk=post.pk %}" class="btn btn-danger">Delete Post</a>
+      <a href="{% url 'post_update' pk=post.pk %}" class="btn btn-primary">{% translate "Edit Post" %}</a>
+      <a href="{% url 'post_delete' pk=post.pk %}" class="btn btn-danger">{% translate "Delete Post" %}</a>
     {% endif %}
-    <a href="{% url 'post_list' %}" class="btn btn-secondary">Back to all posts</a>
+    <a href="{% url 'post_list' %}" class="btn btn-secondary">{% translate "Back to all posts" %}</a>
   </section>
 </div>
 {% endblock %}

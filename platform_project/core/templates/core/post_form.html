@@ -1,15 +1,30 @@
 {% extends "base_generic.html" %}
+{% load i18n %}
 
-{% block title %}{% if object %}Edit Post{% else %}Create New Post{% endif %} - My Platform{% endblock %}
+{% block title %}
+  {% if object %}
+    {% translate "Edit Post" %} - {{ block.super }}
+  {% else %}
+    {% translate "Create New Post" %} - {{ block.super }}
+  {% endif %}
+{% endblock %}
 
 {% block content %}
-  <h2>{% if object %}Edit Post: {{ object.title }}{% else %}Create New Post{% endif %}</h2>
-  <form method="post">
+  <h2>
+    {% if object %}
+      {% blocktranslate with title=object.title %}Edit Post: {{ title }}{% endblocktranslate %}
+    {% else %}
+      {% translate "Create New Post" %}
+    {% endif %}
+  </h2>
+  <form method="post" class="styled-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">{% if object %}Save Changes{% else %}Create Post{% endif %}</button>
+    <button type="submit" class="btn btn-primary">
+      {% if object %}{% translate "Save Changes" %}{% else %}{% translate "Create Post" %}{% endif %}
+    </button>
     {% if object %}
-      <a href="{% url 'post_detail' pk=object.pk %}">Cancel</a>
+      <a href="{% url 'post_detail' pk=object.pk %}" class="btn btn-secondary">{% translate "Cancel" %}</a>
     {% endif %}
   </form>
 {% endblock %}

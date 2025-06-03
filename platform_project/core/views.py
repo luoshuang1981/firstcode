@@ -3,7 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib import messages # Add this import
+from django.contrib import messages
+from django.utils.translation import gettext_lazy as _ # Add this import
 from .models import Post
 from .forms import PostForm
 
@@ -14,7 +15,8 @@ class RegisterView(generic.CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, f'Account created for {form.cleaned_data.get("username")}! You can now log in.')
+        username = form.cleaned_data.get("username")
+        messages.success(self.request, _('Account created for {username}! You can now log in.').format(username=username))
         return response
 
 def home(request):
@@ -33,7 +35,7 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         response = super().form_valid(form)
-        messages.success(self.request, "Post created successfully!")
+        messages.success(self.request, _("Post created successfully!"))
         return response
 
 class PostListView(generic.ListView):
@@ -63,7 +65,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
     def form_valid(self, form):
         # created_by should not change on update, test_func handles authorization
         response = super().form_valid(form)
-        messages.success(self.request, "Post updated successfully!")
+        messages.success(self.request, _("Post updated successfully!"))
         return response
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -76,5 +78,5 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView
         return post.created_by == self.request.user
 
     def form_valid(self, form):
-        messages.success(self.request, f"Post '{self.object.title}' deleted successfully!")
+        messages.success(self.request, _("Post '{title}' deleted successfully!").format(title=self.object.title))
         return super().form_valid(form)

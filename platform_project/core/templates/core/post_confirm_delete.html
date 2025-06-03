@@ -1,14 +1,15 @@
 {% extends "base_generic.html" %}
+{% load i18n %}
 
-{% block title %}Confirm Delete - My Platform{% endblock %}
+{% block title %}{% translate "Confirm Delete" %} - {{ block.super }}{% endblock %}
 
 {% block content %}
-  <h2>Are you sure you want to delete "{{ object.title }}"?</h2>
+  <h2>{% blocktranslate with title=object.title %}Are you sure you want to delete "{{ title }}"?{% endblocktranslate %}</h2>
 
-  <form method="post">
+  <form method="post" class="styled-form">
     {% csrf_token %}
-    <p>This action cannot be undone.</p>
-    <button type="submit" class="btn btn-danger">Confirm Delete</button>
-    <a href="{% url 'post_detail' pk=object.pk %}" class="btn btn-secondary">Cancel</a>
+    <p>{% translate "This action cannot be undone." %}</p>
+    <button type="submit" class="btn btn-danger">{% translate "Confirm Delete" %}</button>
+    <a href="{% url 'post_detail' pk=object.pk %}" class="btn btn-secondary">{% translate "Cancel" %}</a>
   </form>
 {% endblock %}

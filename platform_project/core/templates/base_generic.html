@@ -1,28 +1,29 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}My Platform{% endblock %}</title>
+  <title>{% block title %}{% translate "My Platform" %}{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
   <div class="container">
     <header class="site-header">
-      <h1><a href="{% url 'home' %}" class="site-title">My Platform</a></h1>
+      <h1><a href="{% url 'home' %}" class="site-title">{% translate "My Platform" %}</a></h1>
     </header>
 
     <nav class="navbar">
       <ul class="nav-list">
-        <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
-        <li class="nav-item"><a href="{% url 'post_list' %}" class="nav-link">View Posts</a></li>
+        <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">{% translate "Home" %}</a></li>
+        <li class="nav-item"><a href="{% url 'post_list' %}" class="nav-link">{% translate "View Posts" %}</a></li>
         {% if user.is_authenticated %}
-          <li class="nav-item"><a href="{% url 'post_create' %}" class="nav-link">Create Post</a></li>
-          <li class="nav-item nav-item-right"><a href="{% url 'logout' %}" class="nav-link">Logout ({{ user.username }})</a></li>
+          <li class="nav-item"><a href="{% url 'post_create' %}" class="nav-link">{% translate "Create Post" %}</a></li>
+          <li class="nav-item nav-item-right"><a href="{% url 'logout' %}" class="nav-link">{% blocktranslate %}Logout ({{ user.username }}){% endblocktranslate %}</a></li>
         {% else %}
-          <li class="nav-item nav-item-right"><a href="{% url 'login' %}" class="nav-link">Login</a></li>
-          <li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Register</a></li>
+          <li class="nav-item nav-item-right"><a href="{% url 'login' %}" class="nav-link">{% translate "Login" %}</a></li>
+          <li class="nav-item"><a href="{% url 'register' %}" class="nav-link">{% translate "Register" %}</a></li>
         {% endif %}
       </ul>
     </nav>
@@ -40,7 +41,8 @@
     </main>
 
     <footer class="site-footer">
-      <p>&copy; {% now "Y" %} My Platform. All rights reserved.</p>
+      {% now "Y" as current_year %}
+      <p>{% blocktranslate with year=current_year %}&copy; {{ year }} My Platform. All rights reserved.{% endblocktranslate %}</p>
     </footer>
   </div>
   {% block extra_js %}{% endblock %}

@@ -1,19 +1,20 @@
 {% extends "base_generic.html" %}
+{% load i18n %}
 
-{% block title %}Welcome - Supply & Demand Platform{% endblock %}
+{% block title %}{% translate "Welcome - Supply & Demand Platform" %}{% endblock %}
 
 {% block content %}
   <div class="homepage-hero">
-    <h2>Welcome to Our Supply & Demand Platform!</h2>
-    <p class="lead">Connect with others to find or offer goods and services. Post your needs or your haves and let the community help.</p>
+    <h2>{% translate "Welcome to Our Supply & Demand Platform!" %}</h2>
+    <p class="lead">{% translate "Connect with others to find or offer goods and services. Post your needs or your haves and let the community help." %}</p>
 
     <div class="cta-buttons">
       {% if user.is_authenticated %}
-        <a href="{% url 'post_create' %}" class="btn btn-primary">Create a New Post</a>
-        <a href="{% url 'post_list' %}" class="btn btn-secondary">Browse All Posts</a>
+        <a href="{% url 'post_create' %}" class="btn btn-primary">{% translate "Create a New Post" %}</a>
+        <a href="{% url 'post_list' %}" class="btn btn-secondary">{% translate "Browse All Posts" %}</a>
       {% else %}
-        <a href="{% url 'register' %}" class="btn btn-primary">Register Now</a>
-        <a href="{% url 'post_list' %}" class="btn btn-secondary">Browse Posts</a>
+        <a href="{% url 'register' %}" class="btn btn-primary">{% translate "Register Now" %}</a>
+        <a href="{% url 'post_list' %}" class="btn btn-secondary">{% translate "Browse Posts" %}</a>
       {% endif %}
     </div>
   </div>
@@ -21,26 +22,27 @@
   <hr class="my-4">
 
   <div class="recent-posts">
-    <h3>Recent Activity</h3>
+    <h3>{% translate "Recent Activity" %}</h3>
     {% if recent_posts %}
       <div class="post-list-condensed">
         {% for post in recent_posts %}
           <div class="post-item-condensed">
             <h4><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h4>
-            <p class="post-meta">Type: {{ post.get_post_type_display }} | By: {{ post.created_by.username }} | On: {{ post.created_at|date:"M d, Y" }}</p>
+            <p class="post-meta">{% blocktranslate with type_display=post.get_post_type_display username=post.created_by.username date_created=post.created_at|date:"M d, Y" %}Type: {{ type_display }} | By: {{ username }} | On: {{ date_created }}{% endblocktranslate %}</p>
             <p class="post-categories">
-              Categories:
+              {% translate "Categories" %}:
               {% for category in post.categories.all %}
                 <span class="badge">{{ category.name }}</span>{% if not forloop.last %} {% endif %}
               {% empty %}
-                <span class="badge-empty">None</span>
+                <span class="badge-empty">{% translate "None" %}</span>
               {% endfor %}
             </p>
           </div>
         {% endfor %}
       </div>
     {% else %}
-      <p>No recent posts to display. Be the first to <a href="{% url 'post_create' %}">create one</a>!</p>
+      {% url 'post_create' as create_post_url %}
+      <p>{% blocktranslate %}No recent posts to display. Be the first to <a href="{{ create_post_url }}">create one</a>!{% endblocktranslate %}</p>
     {% endif %}
   </div>
 
